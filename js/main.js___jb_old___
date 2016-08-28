@@ -1,0 +1,64 @@
+/*jshint esversion: 6 */
+// ========= ver. 0.5  ===========
+$(document).ready(function() {
+    let $button = $('.row div');
+    let display = '';
+    let symbols = ['/', '*', '+', '-'];
+
+    $button.on("click", function() {
+        let $btn = $(this).text();
+        let last = display[display.length - 1];
+
+        if ($btn === '=') {
+            //sprawdza czy ostatnia jest liczba i oblicza wynik
+            display === '' || last === '/' || last === '*' || last === '+' || last === '-' ? console.log('I need a number...') : display = eval(display); // jshint ignore:line
+            console.log('eval ', display);
+
+        } else if ($btn === 'AC') {
+            //kasuje wszystko czyli zeruje display
+            console.log('AC');
+            display = '';
+
+        } else if ($btn === 'CE') {
+            //kasuje ostatnia liczbe  z display az do znaku
+            let lastSymbol = symbols.map((e) => display.lastIndexOf(e));
+            display = display.slice(0, Math.max(...lastSymbol));
+
+        } else if ($btn === '') {
+            //gumka - kasuje tylko ostatnia liczbe z display
+            display = display.slice(0, -1);
+
+        } else if ($btn === '.' || $btn === '/' || $btn === '*' || $btn === '+' || $btn === '-') {
+            // last === '.' || last === '/' || last === '*' || last === '+' || last === '-' ? console.log("Double mark...") : display += $btn;
+
+            if (last === '.' || last === '/' || last === '*' || last === '+' || last === '-') {
+                console.log("Double mark...");
+            } else {
+                display += $btn;
+            }
+            // uniemozliwia wprowadzenie jako pierwszego znaku - jestesmy w podpetli znakow
+            if (display.indexOf($btn) === 0 && $btn !== '.') {
+                display = '';
+                // } else if ($btn === '.' && $('#input').text().indexOf('.') !== -1) {
+                //     console.log("Double '.'");
+            }
+
+
+            // if (display.indexOf($btn) === 0 && $btn !== '.') {
+            //     display = '';
+            // }
+
+
+        } else {
+            display += $btn;
+        }
+        //TODO display.round ... tyle miejsc po przecinku ile miala ta dluzsza liczba...
+        //TODO jesli $btn to kropka sprawdz czy display nie posiada juz jakiejs , indexOf()
+        //TODO limit znakow na wyswietlaczu
+        //TODO tempDisplay
+
+        console.log($btn);
+        $('#input').text(display);
+
+    });
+});
