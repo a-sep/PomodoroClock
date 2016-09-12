@@ -10,10 +10,10 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
 
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -23,10 +23,46 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
-    <div class="container text-center baza">
-        <h1>Pomodoro Clock</h1>
 
+<body>
+    <div class="container text-center">
+        <h1>Pomodoro Clock</h1>
+        <div class="row">
+            <div class="col-xs-offset-4 col-xs-2">
+                Break Length
+            </div>
+            <div class="col-xs-2">
+                Session Length
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-offset-4 col-xs-2">
+                <button type="button" class="btn btn-link" id="pauseUp">
+                <i class="fa fa-angle-up fa-2x" aria-hidden="true"></i>
+                </button>
+                <div class="number" id="pause">
+                    3
+                </div>
+                <button type="button" class="btn btn-link" id="pauseDown">
+                <i class="fa fa-angle-down fa-2x" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="col-xs-2">
+                <button type="button" class="btn btn-link" id="sessionUp">
+                <i class="fa fa-angle-up fa-2x" aria-hidden="true"></i>
+                </button>
+                <div class="number" id="session">
+                    3
+                </div>
+                <button type="button" class="btn btn-link" id="sessionDown">
+                <i class="fa fa-angle-down fa-2x" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <canvas id="canvas" width="250" height="250"></canvas>
+        </div>
     </div>
 
 
