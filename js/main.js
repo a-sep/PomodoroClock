@@ -1,10 +1,10 @@
 /*jshint esversion: 6 */
-// ========= ver. 0.0  ===========
+// ========= ver. 0.5  ===========
 
 $(document).ready(function() {
     var pause = Number($('#pause').text());
     var session = Number($('#session').text());
-    $('button').on('click', function() {
+    $('button.btn-link').on('click', function() {
         // take value of id attribute (pause/session)
         var $arrow = $(this).attr('id');
         switch ($arrow) {
@@ -32,9 +32,9 @@ $(document).ready(function() {
         $('#session').text(session);
         reset();
     });
-    // });
 
     // ------------- canvas animation ------------------------------------------------
+
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
 
@@ -115,6 +115,7 @@ $(document).ready(function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         stopStatus = false;
         y = 0;
+        rect.y = 0;
         time = session;
         color = "#6dbe04";
         if (si) clearInterval(si);
@@ -128,7 +129,7 @@ $(document).ready(function() {
         color = rect.color;
         if (color === "#6dbe04") {
             time = session;
-        } else{
+        } else {
             time = pause;
         }
         clearInterval(si);
@@ -136,18 +137,33 @@ $(document).ready(function() {
     }
 
     canvas.addEventListener("click", function(e) {
+
         if (stopStatus) {
             draw(y, color, time);
+        } else if (rect.y !== 0 && stopStatus === false) {
+            stop();
         } else {
             reset();
             draw(y, color, time);
         }
         // console.log('click', y, color, session);
     });
+    circle.draw();
 
-    canvas.addEventListener("mouseout", function(e) {
+    //-------------- canvas end ----------------------
+
+    $('#playBtn').on('click', function() {
+        if (stopStatus) {
+            draw(y, color, time);
+        } else {
+            reset();
+            draw(y, color, time);
+        }
+    });
+    $('#pauseBtn').on('click', function() {
         stop();
     });
-
-    circle.draw();
+    $('#resetBtn').on('click', function() {
+        reset();
+    });
 });

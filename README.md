@@ -1,10 +1,10 @@
 # Pomodoro Clock
 
-Alfa ver. 0.0.
+Alfa ver. 0.5
 
 FreeCodeCamp Pomodoro Clock project.
 
 Status:
-html - need stop and reset buttons
-css - ...
-js - need a timer, animation with colors works fine
+html - need a timer
+css - OK
+js - need a timer, animation with colors and buttons works fine 
