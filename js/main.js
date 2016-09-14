@@ -41,42 +41,50 @@ $(document).ready(function() {
     var circle = {
         x: 125,
         y: 125,
-        radius: 121,
+        radius: 125,
         color: "#6dbe04",
         draw: function() {
             ctx.beginPath();
             ctx.fillStyle = "#2c383e";
             ctx.strokeStyle = this.color;
             ctx.rect(0, 0, canvas.width, canvas.height);
-            ctx.moveTo(canvas.width / 2 + 120, canvas.height / 2);
-            ctx.lineWidth = 5;
+            ctx.moveTo(canvas.width / 2 + 125, canvas.height / 2);
+            ctx.lineWidth = 4;
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
             ctx.stroke();
             ctx.fill();
             ctx.beginPath();
             ctx.strokeStyle = "#2c383e";
-            ctx.moveTo(canvas.width / 2 + 116, canvas.height / 2);
-            ctx.lineWidth = 4;
-            ctx.arc(this.x, this.y, this.radius - 4, 0, Math.PI * 2, true);
+            ctx.moveTo(canvas.width / 2 + 122, canvas.height / 2);
+            ctx.lineWidth = 2;
+            ctx.arc(this.x, this.y, this.radius - 3, 0, Math.PI * 2, true);
             ctx.stroke();
+        },
+        clear: function() {
+            ctx.beginPath();
+            ctx.fillStyle = "#2c383e";
+            ctx.moveTo(canvas.width / 2 + 122, canvas.height / 2);
+            ctx.lineWidth = 2;
+            ctx.arc(this.x, this.y, this.radius - 3, 0, Math.PI * 2, true);
+            ctx.fill();
         }
     };
 
     var rect = {
         x: 0,
         y: 0,
-        vy: 1,
+        height: 100,
         color: "#6dbe04",
         draw: function() {
             ctx.fillStyle = this.color;
-            ctx.fillRect(this.x, this.y, canvas.width, 5);
+            ctx.fillRect(this.x, this.y, canvas.width, this.height);
         }
     };
 
     var y = 0;
     var color = "#6dbe04";
     var time = session;
-    var si;
+    var si, timeInterval;
     var stopStatus = false;
 
     // call the function with the current data
@@ -84,12 +92,14 @@ $(document).ready(function() {
         if (stopStatus) {
             stopStatus = false;
         } else {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // after change from session to pause clear the canvas
+            circle.clear(); // after change from session to pause clear the canvas
         }
-
+        var jump = Math.floor(canvas.height / time);
         si = setInterval(function() {
+            counter(time--); // *60 for minutes
             rect.y = y;
-            y++;
+            // y++;
+            y += jump;
             rect.color = color;
             rect.draw();
             circle.draw();
@@ -106,13 +116,44 @@ $(document).ready(function() {
                 draw(0, color, time);
                 console.log('end of time');
             }
-        }, time / canvas.height * 1000);
 
-        console.log('draw', y, color, time);
+            // }, time / canvas.height * 1000); // *60000 for minutes
+        }, 1000);
+
+
+        console.log('draw', jump, y, color, time);
+    }
+
+    function counter(time) {
+        var minutes, seconds;
+        // timeInterval = setInterval(function() {
+            minutes = parseInt(time / 60, 10);
+            seconds = parseInt(time % 60, 10);
+            // time--;
+
+            if (minutes < 10) {
+                minutes = '0' + minutes;
+            }
+            if (seconds < 10) {
+                seconds = '0' + seconds;
+            }
+            if (time < 0) {
+                // time = duration;
+                clearInterval(timeInterval);
+                console.log('end of counter');
+            }
+            // ctx.font = "48px serif";
+            // ctx.fillStyle = "#ffffff";
+            // ctx.fillText(minutes + ":" + seconds, canvas.width / 2 - 50, canvas.height / 2);
+
+            console.log(minutes, ':', seconds);
+            document.getElementById('time').innerHTML = minutes + ":" + seconds;
+        // }, 500);
+
     }
 
     function reset() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        circle.clear();
         stopStatus = false;
         y = 0;
         rect.y = 0;
@@ -148,8 +189,8 @@ $(document).ready(function() {
         }
         // console.log('click', y, color, session);
     });
-    circle.draw();
 
+    circle.draw();
     //-------------- canvas end ----------------------
 
     $('#playBtn').on('click', function() {
@@ -166,4 +207,5 @@ $(document).ready(function() {
     $('#resetBtn').on('click', function() {
         reset();
     });
+
 });
