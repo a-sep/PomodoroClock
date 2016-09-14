@@ -1,6 +1,5 @@
 /*jshint esversion: 6 */
 // ========= ver. 0.5  ===========
-
 $(document).ready(function() {
     var pause = Number($('#pause').text());
     var session = Number($('#session').text());
@@ -34,7 +33,6 @@ $(document).ready(function() {
     });
 
     // ------------- canvas animation ------------------------------------------------
-
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
 
@@ -73,7 +71,7 @@ $(document).ready(function() {
     var rect = {
         x: 0,
         y: 0,
-        height: 100,
+        height: 0,
         color: "#6dbe04",
         draw: function() {
             ctx.fillStyle = this.color;
@@ -84,8 +82,10 @@ $(document).ready(function() {
     var y = 0;
     var color = "#6dbe04";
     var time = session;
-    var si, timeInterval;
+    var si;
     var stopStatus = false;
+    var minutes, seconds;
+    var counted = 0;
 
     // call the function with the current data
     function draw(y, color, time) {
@@ -94,17 +94,21 @@ $(document).ready(function() {
         } else {
             circle.clear(); // after change from session to pause clear the canvas
         }
-        var jump = Math.floor(canvas.height / time);
+        var jump = Math.ceil(canvas.height / time);
+        time -= counted;
+        counter(time); // *60 for minutes => shows full time befor interval starts
+
         si = setInterval(function() {
-            counter(time--); // *60 for minutes
-            rect.y = y;
-            // y++;
+            circle.clear();
             y += jump;
+            rect.height = y;
             rect.color = color;
             rect.draw();
+            counter(--time); // *60 for minutes
             circle.draw();
 
-            if (rect.y >= canvas.height) {
+            if (time < 0) {
+                counted = 0;
                 if (color === "#6dbe04") {
                     color = "#ff4000";
                     time = pause;
@@ -121,43 +125,37 @@ $(document).ready(function() {
         }, 1000);
 
 
-        console.log('draw', jump, y, color, time);
+        console.log('draw', jump, y, rect.height, color, time, counted);
     }
 
     function counter(time) {
-        var minutes, seconds;
-        // timeInterval = setInterval(function() {
-            minutes = parseInt(time / 60, 10);
-            seconds = parseInt(time % 60, 10);
-            // time--;
+        minutes = parseInt(time / 60, 10);
+        seconds = parseInt(time % 60, 10);
 
-            if (minutes < 10) {
-                minutes = '0' + minutes;
-            }
-            if (seconds < 10) {
-                seconds = '0' + seconds;
-            }
-            if (time < 0) {
-                // time = duration;
-                clearInterval(timeInterval);
-                console.log('end of counter');
-            }
-            // ctx.font = "48px serif";
-            // ctx.fillStyle = "#ffffff";
-            // ctx.fillText(minutes + ":" + seconds, canvas.width / 2 - 50, canvas.height / 2);
-
-            console.log(minutes, ':', seconds);
-            document.getElementById('time').innerHTML = minutes + ":" + seconds;
-        // }, 500);
-
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+        if (seconds < 10) {
+            seconds = '0' + seconds;
+        }
+        if (time < 0) {
+            minutes = '00';
+            seconds = '00';
+            console.log('end of counter');
+        }
+        ctx.font = "48px serif";
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText(minutes + ":" + seconds, canvas.width / 2 - 50, canvas.height / 2 + 50);
+        // console.log(minutes, ':', seconds);
     }
 
     function reset() {
         circle.clear();
         stopStatus = false;
         y = 0;
-        rect.y = 0;
+        rect.height = 0;
         time = session;
+        counted = 0;
         color = "#6dbe04";
         if (si) clearInterval(si);
         circle.draw();
@@ -166,8 +164,9 @@ $(document).ready(function() {
 
     function stop() {
         stopStatus = true;
-        y = rect.y;
+        y = rect.height;
         color = rect.color;
+        counted = eval(time - (minutes * 60 + seconds)); // jshint ignore:line
         if (color === "#6dbe04") {
             time = session;
         } else {
