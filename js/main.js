@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-// ========= ver. 1.0  ===========
+// ========= ver. 1.1  ===========
 $(document).ready(function() {
     var pause = Number($('#pause').text());
     var session = Number($('#session').text());
@@ -96,7 +96,7 @@ $(document).ready(function() {
         } else {
             circle.clear(); // after change from session to pause clear the circle
         }
-        jump = Math.ceil(canvas.height / time);
+        jump = canvas.height / time;
         var count = time - counted;
         counter(count);
         displayText(time);
@@ -121,7 +121,7 @@ $(document).ready(function() {
                 }
                 clearInterval(si);
                 draw(0, color, time);
-                console.log('end of time');
+                // console.log('end of time');
             }
         }, 1000);
         // console.log('DRAW ', 'jump', jump, 'y', y, color, 'time', time, 'counted', counted, playStatus, stopStatus);
@@ -139,7 +139,7 @@ $(document).ready(function() {
         if (time < 0) {
             minutes = '00';
             seconds = '00';
-            console.log('end of counter');
+            // console.log('end of counter');
         }
         ctx.font = "54px serif";
         ctx.fillStyle = "#ffffff";
@@ -147,13 +147,17 @@ $(document).ready(function() {
     }
 
     function displayText(x) {
-        ctx.font = "24px Lato";
+        ctx.font = "22px Lato";
         ctx.fillStyle = "#ffffff";
         ctx.textLetterSpacing = 3;
         if (x === session * 60) {
             ctx.fillText("Session", canvas.width / 2.7, canvas.height / 1.5);
         } else if (x === pause * 60) {
             ctx.fillText("Break", canvas.width / 2.7, canvas.height / 1.5);
+        }
+
+        if(stopStatus){
+          ctx.fillText("Pause", canvas.width / 2.7, canvas.height / 1.2);
         }
     }
 
@@ -183,6 +187,7 @@ $(document).ready(function() {
         }
         counted = eval(time - (minutes * 60) - seconds); // jshint ignore:line
         clearInterval(si);
+        displayText(time);
         // console.log('STOP ', 'jump', jump, 'y', y, color, 'time', time, 'counted', counted, playStatus, stopStatus);
     }
 
