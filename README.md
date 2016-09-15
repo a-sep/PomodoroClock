@@ -1,10 +1,13 @@
 # Pomodoro Clock
 
-Alfa ver. 0.5
+ ver. 1.0
 
 FreeCodeCamp Pomodoro Clock project.
 
 Status:
-html - need a timer
+html - OK
 css - OK
-js - need a timer, animation with colors and buttons works fine 
+js - OK
+
+Ready to tests on codepen.io
+http://codepen.io/artur_sep/pen/wzGPQy
